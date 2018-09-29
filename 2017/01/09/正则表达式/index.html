@@ -1,0 +1,886 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,正则表达式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="正则表达式，又称规则表达式。（英语：Regular Expression，在代码中常简写为regex、regexp或RE），计算机科学的一个概念。正则表通常被用来检索、替换那些符合某个模式(规则)的文本。(来自百度百科)  用处基本上很多编程语言中都会应用到正则表达式，不同语言对它的支持有所不同。（下面我们来介绍它在php语言的基础与应用）">
+<meta name="keywords" content="php,正则表达式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式">
+<meta property="og:url" content="http://EvilMartin.github.io/2017/01/09/正则表达式/index.html">
+<meta property="og:site_name" content="Martin">
+<meta property="og:description" content="正则表达式，又称规则表达式。（英语：Regular Expression，在代码中常简写为regex、regexp或RE），计算机科学的一个概念。正则表通常被用来检索、替换那些符合某个模式(规则)的文本。(来自百度百科)  用处基本上很多编程语言中都会应用到正则表达式，不同语言对它的支持有所不同。（下面我们来介绍它在php语言的基础与应用）">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-07-03T02:32:53.463Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="正则表达式">
+<meta name="twitter:description" content="正则表达式，又称规则表达式。（英语：Regular Expression，在代码中常简写为regex、regexp或RE），计算机科学的一个概念。正则表通常被用来检索、替换那些符合某个模式(规则)的文本。(来自百度百科)  用处基本上很多编程语言中都会应用到正则表达式，不同语言对它的支持有所不同。（下面我们来介绍它在php语言的基础与应用）">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://EvilMartin.github.io/2017/01/09/正则表达式/"/>
+
+
+
+
+
+  <title> 正则表达式 | Martin </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Martin</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">我走的很慢，但我从不后退。</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://EvilMartin.github.io/2017/01/09/正则表达式/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Martin">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Martin">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Martin" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                正则表达式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-09T20:34:15+08:00">
+                2017-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/正则表达式/" itemprop="url" rel="index">
+                    <span itemprop="name">正则表达式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/09/正则表达式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/09/正则表达式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>正则表达式</strong>，又称规则表达式。（英语：Regular Expression，在代码中常简写为regex、regexp或RE），计算机科学的一个概念。正则表通常被用来检索、替换那些符合某个模式(规则)的文本。(来自百度百科)</p>
+<hr>
+<h3 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h3><p>基本上很多编程语言中都会应用到正则表达式，不同语言对它的支持有所不同。（下面我们来介绍它在php语言的基础与应用）<br><a id="more"></a><br>在php里，一个正则表达式由分隔符（可以是除了字母，数字，反斜线以及空白符以为的任何字符如：/,!,#,|,%,~等）和表达式（由一些特殊字符和非特殊组成的字符串如^[a-z0-9]+\w?)和修饰符（拥有关闭或开启某种功能或者模式如i，m，u等）</p>
+<hr>
+<h3 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h3><p><strong>元字符</strong>是正则表达式中具有特殊意义的字符。</p>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\w</td>
+<td>匹配字母或数字或下划线</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配数字</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任意空白符</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>匹配单词的开始或结束</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配字符串的开始</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配字符串的结束</td>
+</tr>
+<tr>
+<td>-</td>
+<td>表示范围</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>匹配括号中的任意一个字符</td>
+</tr>
+<tr>
+<td>*、+、？</td>
+<td>量词</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任意字符（除换行符/n外）</td>
+</tr>
+</tbody>
+</table>
+<p>请看下面一些例子：</p>
+<ul>
+<li><p><strong>匹配以a开头的单词</strong>：<code>\ba\w+\b</code></p>
+<blockquote>
+<p>表示单词以<code>\b</code>为开始处，再是“a”字母，之后是“\w+”表示一个到任意多字母或数字，最后是<code>\b</code>是单词的结束处，那么匹配到的可以是以下几种：<code>aaaaa</code>，<code>ab</code>，<code>acbbb</code>等。</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p><strong>匹配多个中间可有空格数字</strong>：<code>\d+\s?</code></p>
+<blockquote>
+<p><code>\d</code>匹配数字，<code>+</code>表示量词（重复一次或更多次）,<code>\s</code>匹配空白符，<code>？</code>表示0次到1次所以空白符可有可无，且最多只能一个空白符，可匹配：<code>1</code>,<code>1 22</code>,<code>22</code>,<code>14 4</code>,<code>5 6</code>等。</p>
+</blockquote>
+</li>
+<li><p><strong>匹配abcdef中其中一个字符</strong>：<code>[abcdef]或者[a-f]</code></p>
+<blockquote>
+<p>[]匹配括号内的单个字符，那么上面例子就可匹配<code>a</code>，<code>b</code>，<code>c</code>，<code>d</code>，<code>e</code>，<code>f</code>，而在括号内<code>-</code>表示范围。也称为<code>字符组</code>,[?!.]可匹配<code>？</code>，<code>！</code>，<code>.</code>（字符组简单，但是一定要弄清楚什么时候转义），可以指定字符范围<code>[0-9]</code>（跟<code>\d</code>的含义一样）</p>
+</blockquote>
+</li>
+<li><p><strong>匹配任意字符</strong>：<code>.*?</code></p>
+<blockquote>
+<p><code>.</code>元字符可以匹配除换行符以外的字符，<code>*？</code>表示重复任意次，但尽可能的少重复（懒惰匹配模式）。</p>
+</blockquote>
+</li>
+<li><p><strong>起始和结束元字符</strong>：<code>^\d{5,11}$</code>,<code>^\d{5,11}</code>,<code>\d{5,11}$</code>,<code>\d{5,11}</code></p>
+<blockquote>
+<p><code>^\d{5,11}$</code>表示匹配<code>起始和结束位置</code>都是数字且连续5到11位(整个字符串都是数字)<br>  <code>^\d{5,11}</code> 表示匹配<code>起始位置</code>是数字且连续5到11位<br>  <code>\d{5,11}$</code> 表示匹配<code>起始位置</code>是数字且连续5到11位<br>  <code>\d{5,11}</code>  表示匹配连续的5到11位数字<br>  前三个表达式结果只可能有一个匹配结果，而最后一个可以有多种匹配成功的结果，因为一行只可能有一个开始位置跟起始位置。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3 id="量词"><a href="#量词" class="headerlink" title="量词"></a>量词</h3><p>前面已经提到过几个元字符表示量词，也就是说字符的次数，以下列出量词意义</p>
+<table>
+<thead>
+<tr>
+<th>量词</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>重复0次或更多次</td>
+</tr>
+<tr>
+<td>+</td>
+<td>重复1次或更多次</td>
+</tr>
+<tr>
+<td>？</td>
+<td>重复0次或1次</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>重复n次到m次</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>重复n次或更多次</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>重复n次</td>
+</tr>
+</tbody>
+</table>
+<p>比如表达式<code>\(?0\d{2}[)-]?\d{2,8}</code>可匹配<code>(021)82</code>,<code>029-88888888</code>,<code>02889</code>。<code>\(?</code>表示对特殊字符<code>(</code>进行转义,且可有可无,<code>0\d{2}</code>表示数字0后接两位数字,<code>[)-]?</code>表示字符组，匹配括号内的<code>)</code>或<code>-</code>(由于中括号内不会造成歧义，所以一般不需加<code>反斜线\</code>转义),且可有可无,最后的<code>\d{2,8}</code>则表示可有2到8个数字组成。</p>
+<hr>
+<h3 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h3><p><strong>转义</strong>就是在对正则表达式中特殊字符加上<code>反斜线\</code>，从而当做普通字符，比如<code>?,+,*,.,[],()</code>等元字符在正则表达式中加上<code>反斜线\</code>(<code>\*</code>,<code>\?</code>,<code>\.</code>匹配到就是<code>*</code>,<code>?</code>,<code>.</code>)。</p>
+<pre><code>$str = &apos;23\*w.w&apos;;
+$reg = &apos;#[\.\*]#&apos;;
+preg_match_all($reg,$str,$match);
+var_dump($match);
+</code></pre><blockquote>
+<p>以上代码运行结果是匹配到了<code>.</code>和<code>*</code>，<code>#[\.\*]#</code>在元字符中括号内匹配单个字符<code>.</code>或<code>*</code>，因为是元字符所以对它们进行转义。现在我们把括号内的<code>反斜线\</code>去掉变成<code>#[.*]#</code>,运行结果跟前面一样,这是因为在[]字符组内匹配单个字符，且不会造成歧义，可以不需要<code>\</code>([^ ]‘^’在字符组表示反义，非,取反的意思，如果想要当做普通字符则需要加<code>\</code>);</p>
+</blockquote>
+<hr>
+<h3 id="反义"><a href="#反义" class="headerlink" title="反义"></a>反义</h3><p>在正则表达式中有时我们需要进去排除字符组或者取反，以下有几个取反元字符的含义</p>
+<table>
+<thead>
+<tr>
+<th>反义</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\W</td>
+<td>匹配任意不是字母或数字或下划线的字符</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配任意不是数字的字符</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任意不是空白符的字符</td>
+</tr>
+<tr>
+<td>[^a ]</td>
+<td>匹配除a以外的任意字符</td>
+</tr>
+<tr>
+<td>[^sdeq]</td>
+<td>匹配除sdeq这个几个字符以为的任意字符</td>
+</tr>
+</tbody>
+</table>
+<p><code>&lt;a[^&gt;]+&gt;</code> 可匹配<code>&lt;a href=&quot;baidu.com&quot;&gt;</code>.<br>反义是比较少用到的，因为在无形中会扩大匹配范围，例如我们想要匹配不要以字母开头的字符串，一般都会使用<code>[^a-zA-Z]</code>,而不会使用<code>\W</code>(它还排除了数字跟下划线)。</p>
+<hr>
+<p>正则表达式基础语法先总结到这里啦，它在实际应用中还是蛮多的，主要是平时多多练习总结，后续会总结正则表达式的分组，分支以及环视，伪静态的应用等。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+            <a href="/tags/正则表达式/" rel="tag"># 正则表达式</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/29/搭建个人博客/" rel="next" title="用hexo搭建个人博客">
+                <i class="fa fa-chevron-left"></i> 用hexo搭建个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/15/正则表达式-二/" rel="prev" title="正则表达式(二)">
+                正则表达式(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/09/正则表达式/"
+           data-title="正则表达式" data-url="http://EvilMartin.github.io/2017/01/09/正则表达式/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Martin" />
+          <p class="site-author-name" itemprop="name">Martin</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EvilMartin" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#用处"><span class="nav-number">1.</span> <span class="nav-text">用处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元字符"><span class="nav-number">2.</span> <span class="nav-text">元字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#量词"><span class="nav-number">3.</span> <span class="nav-text">量词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转义"><span class="nav-number">4.</span> <span class="nav-text">转义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反义"><span class="nav-number">5.</span> <span class="nav-text">反义</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Martin</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmts"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

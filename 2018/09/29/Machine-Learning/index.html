@@ -1,0 +1,754 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Machine Learning 1. 泛化 蓝点代表生病的树 橙点代表健康的树  接下来，我们来看看图 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning">
+<meta property="og:url" content="http://EvilMartin.github.io/2018/09/29/Machine-Learning/index.html">
+<meta property="og:site_name" content="Martin">
+<meta property="og:description" content="Machine Learning 1. 泛化 蓝点代表生病的树 橙点代表健康的树  接下来，我们来看看图 1">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/Machine-Learning/1526606079638.png">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/Machine-Learning/1526606147539.png">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/Machine-Learning/1526606300592.png">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/Machine-Learning/1526623914152.png">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/Machine-Learning/1526624018134.png">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/Machine-Learning/1526624386563.png">
+<meta property="og:updated_time" content="2018-09-29T03:33:06.459Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Machine Learning">
+<meta name="twitter:description" content="Machine Learning 1. 泛化 蓝点代表生病的树 橙点代表健康的树  接下来，我们来看看图 1">
+<meta name="twitter:image" content="http://evilmartin.github.io/2018/09/29/Machine-Learning/1526606079638.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://EvilMartin.github.io/2018/09/29/Machine-Learning/"/>
+
+
+
+
+
+  <title> Machine Learning | Martin </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Martin</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">我走的很慢，但我从不后退。</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://EvilMartin.github.io/2018/09/29/Machine-Learning/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Martin">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Martin">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Martin" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Machine Learning
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-29T11:15:21+08:00">
+                2018-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/29/Machine-Learning/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/29/Machine-Learning/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Machine-Learning"><a href="#Machine-Learning" class="headerlink" title="Machine Learning"></a>Machine Learning</h3><hr>
+<h3 id="1-泛化"><a href="#1-泛化" class="headerlink" title="1. 泛化"></a>1. 泛化</h3><ul>
+<li>蓝点代表生病的树</li>
+<li>橙点代表健康的树</li>
+</ul>
+<p>接下来，我们来看看图 1<br><img src="/2018/09/29/Machine-Learning/./1526606079638.png" alt="Alt text"><br><a id="more"></a><br>您能设想出一个有效的模型来预测以后的生病或健康的树吗？花点时间在脑海里绘制一条弧线将蓝点与橙点分开，或者在脑海中圈住一些橙点或蓝点。然后再看看图 2，它显示某种机器学习模型如何将生病的树与健康的树区分开。请注意，该模型产生的损失非常低。<br><img src="/2018/09/29/Machine-Learning/./1526606147539.png" alt="Alt text"><br>乍一看，图 2 所示的模型在将健康的树与生病的树区分开方面似乎表现得非常出色。真的是这样吗？</p>
+<p>####损失很低，但仍然是糟糕的模型？</p>
+<p>图 3 显示我们向该模型中添加了新数据后所发生的情况。结果表明，该模型在处理新数据方面表现非常糟糕。请注意，该模型对大部分新数据的分类都不正确<br><img src="/2018/09/29/Machine-Learning/./1526606300592.png" alt="Alt text"><br>图 2 和图 3 所示的模型过拟合了训练数据的特性。过拟合模型在训练过程中产生的损失很低，但在预测新数据方面的表现却非常糟糕。如果某个模型在拟合当前样本方面表现良好，那么我们如何相信该模型会对新数据做出良好的预测呢？<code>过拟合是由于模型的复杂程度超出所需程度而造成的。机器学习的基本冲突是适当拟合我们的数据，但也要尽可能简单地拟合数据</code>。</p>
+<p>机器学习的目标是对从真实概率分布（已隐藏）中抽取的新数据做出良好预测。遗憾的是，模型无法查看整体情况；模型只能从训练数据集中取样。如果某个模型在拟合当前样本方面表现良好，那么您如何相信该模型也会对从未见过的样本做出良好预测呢？</p>
+<p>奥卡姆的威廉是 14 世纪一位崇尚简单的修士和哲学家。他认为科学家应该优先采用更简单（而非更复杂）的公式或理论。奥卡姆剃刀定律在机器学习方面的运用如下：</p>
+<ul>
+<li><code>机器学习模型越简单，良好的实证结果就越有可能不仅仅基于样本的特性。</code></li>
+</ul>
+<p>现今，我们已将奥卡姆剃刀定律正式应用于<code>统计学习理论</code>和<code>计算学习理论领域</code>。这些领域已经形成了泛化边界，即统计化描述模型根据以下因素泛化到新数据的能力：</p>
+<ul>
+<li><code>模型的复杂程度</code></li>
+<li><code>模型在处理训练数据方面的表现</code></li>
+</ul>
+<p>虽然理论分析在理想化假设下可提供正式保证，但在实践中却很难应用。机器学习速成课程则侧重于实证评估，以评判模型泛化到新数据的能力。</p>
+<p>机器学习模型旨在根据以前未见过的新数据做出良好预测。但是，如果您要根据数据集构建模型，如何获得以前未见过的数据呢？一种方法是将您的数据集分成两个子集：</p>
+<ul>
+<li><code>训练集 - 用于训练模型的子集</code></li>
+<li><code>测试集 - 用于测试模型的子集</code></li>
+</ul>
+<p>####机器学习细则:</p>
+<p>以下三项基本假设阐明了泛化：</p>
+<ul>
+<li><code>我们从分布中随机抽取独立同分布 (i.i.d) 的样本。换言之，样本之间不会互相影响。（另一种解释：i.i.d. 是表示变量随机性的一种方式）</code></li>
+<li><code>分布是平稳的；即分布在数据集内不会发生变化</code></li>
+<li><code>我们从同一分布的数据划分中抽取样本</code></li>
+</ul>
+<p>在实践中，我们有时会违背这些假设。例如：</p>
+<ul>
+<li>想象有一个选择要展示的广告的模型。如果该模型在某种程度上根据用户以前看过的广告选择广告，则会违背 i.i.d. 假设。</li>
+<li>想象有一个包含一年零售信息的数据集。用户的购买行为会出现季节性变化，这会违反平稳性。</li>
+</ul>
+<p>如果违背了上述三项基本假设中的任何一项，那么我们就必须密切注意指标。</p>
+<p>####总结:</p>
+<ul>
+<li><code>如果某个模型尝试紧密拟合训练数据，但却不能很好地泛化到新数据，就会发生过拟合</code></li>
+<li><code>如果不符合监督式机器学习的关键假设，那么我们将失去对新数据进行预测这项能力的重要理论保证</code></li>
+</ul>
+<h3 id="2-表示-Representation-：特征工程"><a href="#2-表示-Representation-：特征工程" class="headerlink" title="2. 表示 (Representation)：特征工程"></a>2. 表示 (Representation)：特征工程</h3><p><code>传统编程的关注点是代码。在机器学习项目中，关注点变成了表示。也就是说，开发者通过添加和改善特征来调整模型</code></p>
+<p>####将原始数据映射到特征</p>
+<p>图 左侧表示来自输入数据源的原始数据，右侧表示特征矢量，也就是组成数据集中样本的浮点值集。 <code>特征工程指的是将原始数据转换为特征矢量</code>。进行特征工程预计需要大量时间。</p>
+<p>机器学习模型通常期望样本表示为实数矢量。这种矢量的构建方法如下：<code>为每个字段衍生特征，然后将它们全部连接到一起。</code><br><img src="/2018/09/29/Machine-Learning/./1526623914152.png" alt="Alt text"></p>
+<p>####映射数值<br>机器学习模型根据浮点值进行训练，因此整数和浮点原始数据不需要特殊编码。如图 所示，将原始整数值 6 转换为特征值 6.0 是没有意义的：<br><img src="/2018/09/29/Machine-Learning/./1526624018134.png" alt="Alt text"></p>
+<h4 id="映射字符串值"><a href="#映射字符串值" class="headerlink" title="映射字符串值"></a>映射字符串值</h4><p>模型无法通过字符串值学习规律，因此您需要进行一些特征工程来将这些值转换为数字形式</p>
+<ul>
+<li>首先为您要表示的所有特征的字符串值定义一个词汇表。对于 street_name 特征，该词汇表中将包含您知道的所有街道。</li>
+<li>然后使用该词汇表创建一个<code>独热编码</code>，用于将指定字符串值表示为<code>二元矢量</code>。在该矢量（与指定的字符串值对应）中：<ul>
+<li>只有一个元素设为 1</li>
+<li>其他所有元素均设为 0</li>
+<li>该矢量的长度等于词汇表中的元素数。</li>
+</ul>
+</li>
+</ul>
+<p>下图 显示了某条特定街道 (Shorebird Way) 的独热编码。在此二元矢量中，代表 Shorebird Way 的元素的值为 1，而代表所有其他街道的元素的值为 0。<br><img src="/2018/09/29/Machine-Learning/./1526624386563.png" alt="Alt text"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/29/Toward-large-scale-vulnerability-discovery-using-Machine-learning/" rel="next" title="Toward large-scale vulnerability discovery using Machine learning">
+                <i class="fa fa-chevron-left"></i> Toward large-scale vulnerability discovery using Machine learning
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/29/VulPecker/" rel="prev" title="VulPecker">
+                VulPecker <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/09/29/Machine-Learning/"
+           data-title="Machine Learning" data-url="http://EvilMartin.github.io/2018/09/29/Machine-Learning/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Martin" />
+          <p class="site-author-name" itemprop="name">Martin</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EvilMartin" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Machine-Learning"><span class="nav-number">1.</span> <span class="nav-text">Machine Learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-泛化"><span class="nav-number">2.</span> <span class="nav-text">1. 泛化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-表示-Representation-：特征工程"><span class="nav-number">3.</span> <span class="nav-text">2. 表示 (Representation)：特征工程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#映射字符串值"><span class="nav-number">3.1.</span> <span class="nav-text">映射字符串值</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Martin</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmts"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

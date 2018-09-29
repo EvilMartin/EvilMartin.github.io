@@ -1,0 +1,767 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="VulDeePecker: A Deep Learning-Based System for  Vulnerability Detection  中文标题： VulDeePecker：一个基于深度学习的漏洞检测系统  简介： vulDeePecer是基于深度学习的智能漏洞检测系统，可以降低软件漏洞的漏报率(1)以及解决专家手动自定义繁杂的软件漏洞特征的工作(2)。vulDeePecer与目前存在静">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VulDeepecker">
+<meta property="og:url" content="http://EvilMartin.github.io/2018/09/29/VulDeepecker/index.html">
+<meta property="og:site_name" content="Martin">
+<meta property="og:description" content="VulDeePecker: A Deep Learning-Based System for  Vulnerability Detection  中文标题： VulDeePecker：一个基于深度学习的漏洞检测系统  简介： vulDeePecer是基于深度学习的智能漏洞检测系统，可以降低软件漏洞的漏报率(1)以及解决专家手动自定义繁杂的软件漏洞特征的工作(2)。vulDeePecer与目前存在静">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/VulDeepecker/1526269599343.png">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/VulDeepecker/1526269549526.png">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/VulDeepecker/1526269413581.png">
+<meta property="og:image" content="http://evilmartin.github.io/2018/09/29/VulDeepecker/1526269451133.png">
+<meta property="og:updated_time" content="2018-09-29T02:47:58.266Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VulDeepecker">
+<meta name="twitter:description" content="VulDeePecker: A Deep Learning-Based System for  Vulnerability Detection  中文标题： VulDeePecker：一个基于深度学习的漏洞检测系统  简介： vulDeePecer是基于深度学习的智能漏洞检测系统，可以降低软件漏洞的漏报率(1)以及解决专家手动自定义繁杂的软件漏洞特征的工作(2)。vulDeePecer与目前存在静">
+<meta name="twitter:image" content="http://evilmartin.github.io/2018/09/29/VulDeepecker/1526269599343.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://EvilMartin.github.io/2018/09/29/VulDeepecker/"/>
+
+
+
+
+
+  <title> VulDeepecker | Martin </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Martin</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">我走的很慢，但我从不后退。</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://EvilMartin.github.io/2018/09/29/VulDeepecker/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Martin">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Martin">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Martin" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                VulDeepecker
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-29T10:44:39+08:00">
+                2018-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/29/VulDeepecker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/29/VulDeepecker/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>VulDeePecker: A Deep Learning-Based System for  Vulnerability Detection</code></p>
+<hr>
+<h3 id="中文标题："><a href="#中文标题：" class="headerlink" title="中文标题："></a>中文标题：</h3><blockquote>
+<p>VulDeePecker：一个基于深度学习的漏洞检测系统</p>
+</blockquote>
+<h3 id="简介："><a href="#简介：" class="headerlink" title="简介："></a>简介：</h3><blockquote>
+<p>vulDeePecer是基于深度学习的智能漏洞检测系统，可以<code>降低软件漏洞的漏报率(1)</code>以及<code>解决专家手动自定义繁杂的软件漏洞特征的工作(2)</code>。<code>vulDeePecer</code>与目前存在静态漏洞检测软件工具进行实验对比（例如<code>Flawfinder</code>、<code>RATS</code>、<code>Checkmarx</code>、<code>RATS</code>、<code>VUDDY</code>,<code>VulPecker</code>)，<code>vulDeePecer</code>针对相应类型的软件漏洞，它模型正确识别率达到了78%以上，相比其他工具，它检测漏洞是更有成效。</p>
+</blockquote>
+<h3 id="中文摘要："><a href="#中文摘要：" class="headerlink" title="中文摘要："></a>中文摘要：</h3><blockquote>
+<p>自动检测软件漏洞是一个重要的研究课题。但是，目前解决方案主要是依赖人类专家去自定义特征并且经常错过了许多软件漏洞（例如软件出现高漏报率<code>(FNR)</code>)。在这篇论文中，作者提出了基于深度学习的软件漏洞检测去减轻人工手动自动义繁杂软件漏洞的特征的工作任务，同时，作者也提到适用于深度学习的软件程序的表示形式（即如何表达软件程序），这个表示形式是<code>代码小工具code gadget</code>(主要保持上下文关系代码行（不需要连续性）即可)，再将<code>code gadget</code>转为<code>矢量vetcor</code>。从而设计出基于深度学习软件漏洞系统<code>vulDeePecer</code>,作者为了评估<code>vulDeePecer</code>，提出了第一个深度学习方法的漏洞数据集。实验过程中，<code>vulDeePecer</code>检测漏洞更有成效，作者用它来检测现有3个软件产品（  <code>Xen, Seamonkey, and Libav</code>)并且发现了4个漏洞（这些漏洞并没有被报告在国家安全漏洞数据库<code>NVD</code>,以及供应商通过发布产品新版本默默修补了这些漏洞)，而其他软件漏洞检测工具几乎遗漏了这几个漏洞。</p>
+</blockquote>
+<h3 id="技术路线："><a href="#技术路线：" class="headerlink" title="技术路线："></a>技术路线：</h3><p><code>Learning Phase</code>:</p>
+<blockquote>
+<p>1 .<code>Extracting the library/API function calls and the corresponding program slices.</code><br>    (1.1)从训练程序集中提取<code>library/API function calls</code>(目前的VulDeePecker主要集中在CWE-119与CWE-399相关的<code>library/API function calls</code>)<br>    (1.2) 在从1.1中提取的<code>library/API function calls</code>的每个参数中提取相关<code>代码片段</code>(数据流处理)</p>
+</blockquote>
+<ol start="2">
+<li><code>Generating code gadgets of the training programs and their ground truth labels</code><br>(2.1)组装1.2中提取到的<code>代码片段</code>为<code>代码小工具</code>（中间程序表示方式<code>code gadgets</code>.每个<code>library/API function calls</code>就有一个<code>code gadgets</code>）<br>(2.2)将组装好的<code>code gadgets</code>打上标签（用1表示漏洞，0表示正常程序，作者已知的程序类型）<br><img src="/2018/09/29/VulDeepecker/./1526269599343.png" alt="Alt text"></li>
+</ol>
+<blockquote>
+<p>3 .<code>Transforming code gadgets into vector representations</code><br>    (3.1)将<code>code gadgets</code>转换为精确的符号表示（<code>symbolic represetations</code>,为了保留程序某些语义信息）<br>    (3.2)将(3.1)获取到的<code>symbolic represetations</code>编码为向量(<code>vectors</code>,作为<code>BLSTM</code>神经网络的输入源）<br><img src="/2018/09/29/VulDeepecker/./1526269549526.png" alt="Alt text"></p>
+</blockquote>
+<ol start="4">
+<li><code>Traning a BLSTM neural network</code>( 输出-&gt;生成漏洞匹配的模型)</li>
+</ol>
+<p><img src="/2018/09/29/VulDeepecker/./1526269413581.png" alt="Alt text"></p>
+<a id="more"></a>
+<p><code>Detection Phase</code>(Given one or multiple target programs, we extract library/API function calls from them as well as the corresponding program slices, which are assembled into code gadgets. The code gadgets are transformed into<br>their symbolic representations, which are encoded into vectors and used as input to the trained BLSTM neural network.<br>The network outputs which vectors, and therefore which code gadgets, are vulnerable (“1”) or not (“0”). If a code gadget is<br>vulnerable, it pins down the location of the vulnerability in thetarget program):</p>
+<ol start="5">
+<li><p><code>Transforming target programs into code gadgets and vectors.</code></p>
+</li>
+<li><p><code>Detection</code>7<br><img src="/2018/09/29/VulDeepecker/./1526269451133.png" alt="Alt text"></p>
+</li>
+</ol>
+<p>技术路线总结：训练阶段 主要是通过源代码-&gt;代码小工具（中间程序表示）-&gt;向量，经过BLTSM神经网络训练生成<code>漏洞匹配模式</code>模型<br>检测阶段 用生成模型检测源码是否是有漏洞，并且确定其位置。</p>
+<h3 id="贡献："><a href="#贡献：" class="headerlink" title="贡献："></a>贡献：</h3><blockquote>
+<ul>
+<li>第一个提出基于深度学习的漏洞检测的研究</li>
+<li>作者设计跟实施一个基于深度学习的漏洞检测系统，简称Vulnerability Deep Pecker（<code>vulDeePecer</code>）</li>
+<li>作者用于评估<code>vulDeePecer</code>以及未来其他基于深度学习的漏洞检测系统的数据集，并已共享于 <code>https://github.com/CGCL-codes/VulDeePecker</code></li>
+</ul>
+</blockquote>
+<h3 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h3><blockquote>
+<ul>
+<li><code>VulDeePecker</code>目前的设计仅限于通过假定程序源码是可用的来解决漏洞检测</li>
+<li><code>VulDeePecker</code>目前只能处理 <code>C/C++</code>程序</li>
+<li><code>VulDeePecker</code>目前的设计只能处理 与漏洞相关连的<code>类库/API方法</code></li>
+<li><code>VulDeePecker</code>目前的设计只适用数据流分析，不包含控制流分析</li>
+<li><code>VulDeePecker</code>目前的设计仅限于BLSTM神经网络</li>
+<li><code>VulDeePecker</code>目前的设计仅限于内存溢出漏洞与资源管理漏洞</li>
+</ul>
+</blockquote>
+<h3 id="vulnerability-detection-approach"><a href="#vulnerability-detection-approach" class="headerlink" title="vulnerability detection approach"></a>vulnerability detection approach</h3><blockquote>
+<p>current  vulnerabilty detection approach mainly is <code>code similary-based</code> and <code>pattern-based</code>.</p>
+</blockquote>
+<ul>
+<li>The pattern-based detection approach typically requires multiple instances of the same or similar vulnerability before a pattern can be identified.</li>
+<li><p>The code-similarity based detection approach only requires a single instance of vulnerability.</p>
+</li>
+<li><p><code>pattern-based</code>: this approach can be devided three categories</p>
+<ul>
+<li>First categories:  the patterns   are generated  manually   by human experts(e.g. ,open source tools <code>Flawfinder/RATS/ITS4</code>and Commerical tools <code>Checkmarx/Fortify/Coverity</code>)</li>
+<li>Second categories: the patterns are generated semi-automicially  form pre-classified  vulnerabilities(e.g.,<code>missing check vulnerabilities</code>/<code>taint-style vulnerabilities</code>/ <code>information leakage vulnerabilities</code>/<code>a pattern is specific to a type of vulnerabilities</code>)</li>
+<li>third categories: patterns are generated semi-automatically from type-agnostic vulnerabilities (i.e., no need to pre-classify them into different types). These methods<code>use machine learning technique</code>s, which rely on human experts for defining features to characterize vulnerabilities</li>
+</ul>
+</li>
+<li><p><code>Code similarity-based approach</code>:This approach has three steps</p>
+<ul>
+<li>First step:  divide a program into some <code>code fragments</code></li>
+<li>Second step : represent each code fragment in the <code>abstract fashion</code>, including <code>tokens</code> , <code>trees</code> , and <code>graphs</code></li>
+<li>third step:  compute the similarity between code fragments via their abstract representations obtained in the second step.</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/03/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/29/Toward-large-scale-vulnerability-discovery-using-Machine-learning/" rel="prev" title="Toward large-scale vulnerability discovery using Machine learning">
+                Toward large-scale vulnerability discovery using Machine learning <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/09/29/VulDeepecker/"
+           data-title="VulDeepecker" data-url="http://EvilMartin.github.io/2018/09/29/VulDeepecker/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Martin" />
+          <p class="site-author-name" itemprop="name">Martin</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EvilMartin" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#中文标题："><span class="nav-number">1.</span> <span class="nav-text">中文标题：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简介："><span class="nav-number">2.</span> <span class="nav-text">简介：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中文摘要："><span class="nav-number">3.</span> <span class="nav-text">中文摘要：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技术路线："><span class="nav-number">4.</span> <span class="nav-text">技术路线：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#贡献："><span class="nav-number">5.</span> <span class="nav-text">贡献：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局限性"><span class="nav-number">6.</span> <span class="nav-text">局限性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vulnerability-detection-approach"><span class="nav-number">7.</span> <span class="nav-text">vulnerability detection approach</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Martin</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wmts"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
